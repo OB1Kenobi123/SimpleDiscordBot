@@ -2,6 +2,10 @@ import discord
 from discord import app_commands
 import random
 import os
+from dotenv import load_dotenv
+from commands import fun
+
+load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
@@ -18,6 +22,8 @@ client = MyClient()
 
 @client.event
 async def on_ready():
+    fun.setup(client)
+
     await client.tree.sync()
     print(f"Logged in as {client.user}")
 
@@ -39,23 +45,6 @@ async def roll(interaction: discord.Interaction):
     await interaction.response.send_message(
         f"🎲 You rolled a {random.randint(1,6)}!"
     )
-
-
-@client.tree.command(name="coinflip", description="Flip a coin")
-async def coinflip(interaction: discord.Interaction):
-    await interaction.response.send_message(
-        random.choice(["🪙 Heads!", "🪙 Tails!"])
-    )
-
-
-@client.tree.command(name="joke", description="Tell a joke")
-async def joke(interaction: discord.Interaction):
-    jokes = [
-        "Why did the chicken cross the road? 🐔",
-        "Why do programmers hate nature? Too many bugs 🐛",
-        "My computer caught a virus... it needs a doctor 💻"
-    ]
-    await interaction.response.send_message(random.choice(jokes))
 
 
 @client.tree.command(name="8ball", description="Ask the magic 8-ball a question")
@@ -88,17 +77,6 @@ async def choose(interaction: discord.Interaction, options: str):
 @app_commands.describe(message="What should I say?")
 async def say(interaction: discord.Interaction, message: str):
     await interaction.response.send_message(message)
-
-
-@client.tree.command(name="fact", description="Give a random fact")
-async def fact(interaction: discord.Interaction):
-    facts = [
-        "🐙 Octopuses have three hearts.",
-        "🌳 Sharks are older than trees.",
-        "🍯 Honey never expires."
-    ]
-
-    await interaction.response.send_message(random.choice(facts))
 
 
 @client.tree.command(name="reverse", description="Reverse text")
