@@ -4,6 +4,8 @@ import random
 import os
 from dotenv import load_dotenv
 from commands import fun
+from flask import Flask
+from threading import Thread
 
 load_dotenv()
 
@@ -85,5 +87,16 @@ async def reverse(interaction: discord.Interaction, text: str):
     await interaction.response.send_message(text[::-1])
 
 import os
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Bot is running!"
+
+def run():
+    app.run(host="0.0.0.0", port=10000)
+
+Thread(target=run).start()
 
 client.run(TOKEN)
